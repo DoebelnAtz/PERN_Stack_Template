@@ -25,7 +25,6 @@ export const catchErrors = (
 					error.response?.length ? error.response : errorMessage,
 					error.status || 500,
 					error.description || error,
-					error.code,
 				),
 			);
 		}
