@@ -9,6 +9,7 @@ export const catchErrors = (
 	return async (req, res, next): Promise<any> => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
+			console.log(errors);
 			return next(
 				new CustomError(
 					`${errorMessage}: invalid input`,
@@ -20,11 +21,13 @@ export const catchErrors = (
 		try {
 			return await requestHandler(req, res, next);
 		} catch (error) {
-			next(
+			return next(
 				new CustomError(
 					error.response?.length ? error.response : errorMessage,
 					error.status || 500,
 					error.description || error,
+					error.message,
+					error.code,
 				),
 			);
 		}

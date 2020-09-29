@@ -1,19 +1,20 @@
 import axios from 'axios';
 
-const backendUrl = 'http://localhost:5000';
+import config from '../Config'
 
 export const makeRequest = async (url: string, method: any, data: any = {}) => {
 	let resp;
 
 	try {
 		resp = await axios({
-			url: `${backendUrl}/api${url}`,
+			url: `${config.url}/api${url}`,
 			method: method,
 			data: data,
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
+		return resp.data;
 	} catch (e) {
 		if (!e.response) {
 			//window.location.replace('/505');
@@ -22,5 +23,4 @@ export const makeRequest = async (url: string, method: any, data: any = {}) => {
 			throw e;
 		}
 	}
-	return resp;
 };
