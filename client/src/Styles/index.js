@@ -20,14 +20,17 @@ export const colorAdjust = {
 
 export const color = {
 	primary: '#AC7BC2',
+	primaryShade: colorAdjust.darken('#0064FF', 0.2),
 	secondary: '#E0AB79',
+	secondaryShade: colorAdjust.darken('#FF684F', 0.2),
 	tertiary: '#86D889',
-	siteBG: baseColor,
-	siteBG1: colorAdjust.lighten(baseColor, 0.5),
-	siteBG2: colorAdjust.lighten(baseColor, 1.0),
-	siteBG3: colorAdjust.lighten(baseColor, 1.5),
-	siteBG4: colorAdjust.lighten(baseColor, 2.0),
-	siteBG5: colorAdjust.lighten(baseColor, 2.5),
+	tertiaryShade: colorAdjust.darken('#FFE8D8', 0.1),
+	BG0: baseColor,
+	BG1: colorAdjust.darken(baseColor, 0.05),
+	BG2: colorAdjust.darken(baseColor, 0.1),
+	BG3: colorAdjust.darken(baseColor, 0.15),
+	BG4: colorAdjust.darken(baseColor, 0.2),
+	BG5: colorAdjust.darken(baseColor, 0.25),
 	textColor: colorAdjust.lighten(baseColor, 0.15),
 };
 
@@ -86,10 +89,10 @@ export const modal = {
 		top: 15%;
 		max-height: 80vh;
 		padding: ${length.margin};
-		border: 5px solid ${color.siteBG2};
+		border: 5px solid ${color.BG2};
 		border-radius: 2px;
 		margin: auto;
-		background: ${color.siteBG2};
+		background: ${color.BG2};
 		overflow: auto;
 		z-index: 10;
 		${layout.col};
@@ -136,7 +139,7 @@ export const components = {
 	input: css`
 		border-radius: 4px;
 		padding-left: 10px;
-		background-color: ${color.siteBG1};
+		background-color: ${color.BG1};
 		color: ${color.primary};
 		height: 36px;
 		font-size: 16px;
@@ -146,13 +149,68 @@ export const components = {
 			border: 1px solid ${colorAdjust.darken(color.primary, 0.2)};
 		}
 	`,
+	animatedLabeledInput: css`
+		position: relative;
+		overflow: hidden;
+		height: 66px;
+		& input {
+			width: 100%;
+			height: 100%;
+			color: ${color.primary};
+			padding-top: 20px;
+			border: none;
+			outline: none;
+			&:focus + label::after {
+				transform: translateX(0%);
+			}
+			&:valid + label::after {
+				transform: translateX(0%);
+			}
+			&:focus + label span {
+				transform: translateY(-100%);
+			}
+			&:valid + label span {
+				transform: translateY(-100%);
+			}
+		}
+
+		& label {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			border-bottom: 2px solid ${color.tertiary};
+		}
+
+		& label::after {
+			content: '';
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			left: 0;
+			bottom: -2px;
+			transition: all 0.3s ease;
+			border-bottom: 2px solid ${color.secondary};
+			transform: translateX(-100%);
+		}
+		& label span {
+			position: absolute;
+			bottom: 5px;
+			${font.DCBold};
+			color: ${color.header};
+			font-size: 18px;
+			transition: all 0.3s ease;
+		}
+	`,
 	button: css`
 		padding: 2px 7px;
 		height: 36px;
 		letter-spacing: 1px;
 		line-height: 30px;
 		${font.text};
-		background-color: ${color.siteBG2};
+		background-color: ${color.BG2};
 		${cursor.clickable};
 		border: 1px solid ${color.primary};
 		border-radius: ${length.radius};
@@ -162,13 +220,8 @@ export const components = {
 			outline: none;
 		}
 		&:hover {
-			background-color: ${colorAdjust.darken(color.siteBG2, 0.1)};
+			background-color: ${colorAdjust.darken(color.BG2, 0.1)};
 		}
 	`,
 };
-
-export const RowDiv = styled.div`
-	${layout.row};
-	margin: ${props => props.margin ? props.margin : '0'};
-`;
 
