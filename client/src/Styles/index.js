@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import Color from 'color';
+import Config from '../Config'
 
 const baseColor = '#161616';
 
@@ -19,12 +20,12 @@ export const colorAdjust = {
 };
 
 export const color = {
-	primary: '#AC7BC2',
-	primaryShade: colorAdjust.darken('#0064FF', 0.2),
-	secondary: '#E0AB79',
-	secondaryShade: colorAdjust.darken('#FF684F', 0.2),
-	tertiary: '#86D889',
-	tertiaryShade: colorAdjust.darken('#FFE8D8', 0.1),
+	primary: Config.colors.primary,
+	primaryShade: colorAdjust.darken(Config.colors.primary, 0.1),
+	secondary: Config.colors.secondary,
+	secondaryShade: colorAdjust.darken(Config.colors.secondary, 0.1),
+	tertiary: Config.colors.tertiary,
+	tertiaryShade: colorAdjust.darken(Config.colors.tertiary, 0.1),
 	BG0: baseColor,
 	BG1: colorAdjust.darken(baseColor, 0.05),
 	BG2: colorAdjust.darken(baseColor, 0.1),
