@@ -1,10 +1,5 @@
 export default {
-    url: 'http://localhost:3000',
-    colors: {
-        primary: '#AC7BC2',
-        secondary: '#E0AB79',
-        tertiary: '#86D889',
-    }
+    url: process.env.NODE_ENV === 'production' ? 'http://localhost:5000' : 'http://localhost:5000',
 };
 
 

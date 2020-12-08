@@ -20,56 +20,83 @@ export const colorAdjust = {
 };
 
 export const color = {
-	primary: Config.colors.primary,
-	primaryShade: colorAdjust.darken(Config.colors.primary, 0.1),
-	secondary: Config.colors.secondary,
-	secondaryShade: colorAdjust.darken(Config.colors.secondary, 0.1),
-	tertiary: Config.colors.tertiary,
-	tertiaryShade: colorAdjust.darken(Config.colors.tertiary, 0.1),
-	BG0: baseColor,
-	BG1: colorAdjust.darken(baseColor, 0.05),
-	BG2: colorAdjust.darken(baseColor, 0.1),
-	BG3: colorAdjust.darken(baseColor, 0.15),
-	BG4: colorAdjust.darken(baseColor, 0.2),
-	BG5: colorAdjust.darken(baseColor, 0.25),
-	textColor: colorAdjust.lighten(baseColor, 0.15),
+	p500: '#4062BB',
+	p700: colorAdjust.darken(Config.colors.p500, 0.1),
+	p900: colorAdjust.darken(Config.colors.p500, 0.2),
+	p300: colorAdjust.lighten(Config.colors.p500, 0.1),
+	p100: colorAdjust.lighten(Config.colors.p500, 0.2),
+	s500: '#EB5E55',
+	s700: colorAdjust.darken(Config.colors.s500, 0.1),
+	s900: colorAdjust.darken(Config.colors.s500, 0.2),
+	s100: colorAdjust.lighten(Config.colors.s500, 0.2),
+	s300: colorAdjust.lighten(Config.colors.s500, 0.1),
+	t500: '#629677',
+	t700: colorAdjust.darken(Config.colors.t500, 0.1),
+	t900: colorAdjust.darken(Config.colors.t500, 0.2),
+	t300: colorAdjust.lighten(Config.colors.t500, 0.1),
+	t100: colorAdjust.lighten(Config.colors.t500, 0.2),
+	b500: '#EBEBEB',
+	b700: colorAdjust.darken(Config.colors.b500, 0.1),
+	b900: colorAdjust.darken(Config.colors.b500, 0.2),
+	b300: colorAdjust.lighten(Config.colors.b500, 0.1),
+	b100: colorAdjust.lighten(Config.colors.b500, 0.2),
+	d500: '#EBEBEB',
+	d700: colorAdjust.darken(Config.colors.d500, 0.1),
+	d900: colorAdjust.darken(Config.colors.d500, 0.2),
+	d300: colorAdjust.lighten(Config.colors.d500, 0.1),
+	d100: colorAdjust.lighten(Config.colors.d500, 0.2),
 };
 
 export const units = {
-	margin: '10px',
-	radius: '4px'
+	xs: '10px',
+	s: '14px',
+	m: '20px',
+	l: '28px',
+	xl: '38px',
 };
 
 export const font = {
+	RCBold: css`
+		font-family: roboto-condensed-bold, sans-serif;
+	`,
+	RCReg: css`
+		font-family: roboto-condensed-regular, sans-serif;
+	`,
+	RCLight: css`
+		font-family: roboto-condensed-light, sans-serif;
+	`,
+	RReg: css`
+		font-family: roboto-regular, sans-serif;
+	`,
+	RBold: css`
+		font-family: roboto-bold, sans-serif;
+	`,
+	BBold: css`
+		font-family: 'Libre Baskerville', serif;
+	`,
 	title: css`
 		font-size: 36px;
 		letter-spacing: 2px;
 	`,
 	text: css`
-		font-size: 14px;
-		letter-spacing: 1px;
+		font-size: 20px;
+		font-family: roboto-regular, sans-serif;
+		letter-spacing: 0.5px;
+		color: ${color.p500};
+	`,
+	error: css`
+		font-size: 18px;
+		font-family: din-condensed-bold, sans-serif;
+		color: ${color.s900} !important;
 	`,
 	link: css`
 		text-decoration: none;
 		&:hover {
-			color: ${colorAdjust.darken(color.tertiary, 0.2)};
+			color: ${colorAdjust.darken(
+				color.t500,
+				0.2,
+			)};
 		}
-	`,
-};
-
-export const layout = {
-	row: css`
-		display: flex;
-		flex-wrap: wrap;
-	`,
-	col: css`
-		flex-basis: 0;
-		flex-grow: 1;
-		max-width: 100%;
-	`,
-	centered: css`
-		margin-left: auto;
-		margin-right: auto;
 	`,
 };
 
@@ -80,36 +107,6 @@ export const border = {
 			border-style: solid;
 			border-width: ${top}px ${right}px ${bot}px ${left}px;
 		`,
-};
-
-export const modal = {
-	inside: css`
-		position: absolute;
-		left: 20%;
-		right: 20%;
-		top: 15%;
-		max-height: 80vh;
-		padding: ${length.margin};
-		border: 5px solid ${color.BG2};
-		border-radius: 2px;
-		margin: auto;
-		background: ${color.BG2};
-		overflow: auto;
-		z-index: 10;
-		${layout.col};
-	`,
-	outside: css`
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		margin: auto;
-		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 11;
-	`,
 };
 
 export const cursor = {
@@ -138,16 +135,21 @@ export const cursor = {
 
 export const components = {
 	input: css`
-		border-radius: 4px;
-		padding-left: 10px;
-		background-color: ${color.BG1};
-		color: ${color.primary};
-		height: 36px;
+		${font.RCReg};
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background-color: ${color.t500};
+		border: none;
+		caret-color: ${color.p500};
+		caret-shape: block;
+		color: ${color.p500};
+		padding: 2px 6px;
 		font-size: 16px;
-		border: 1px solid ${color.primary};
+		border-radius: 0;
+		box-shadow: none;
 		&:focus {
 			outline: none;
-			border: 1px solid ${colorAdjust.darken(color.primary, 0.2)};
 		}
 	`,
 	animatedLabeledInput: css`
@@ -157,7 +159,8 @@ export const components = {
 		& input {
 			width: 100%;
 			height: 100%;
-			color: ${color.primary};
+			font-size: 16px;
+			color: ${color.text};
 			padding-top: 20px;
 			border: none;
 			outline: none;
@@ -173,6 +176,16 @@ export const components = {
 			&:valid + label span {
 				transform: translateY(-100%);
 			}
+			&:-webkit-autofill,
+			:-webkit-autofill:focus {
+				background-color: ${color.b100};
+				-webkit-box-shadow: 0 0 0 1000px
+					${color.b100} inset !important;
+			}
+
+			&:-webkit-autofill + label span {
+				transform: translateY(-100%);
+			}
 		}
 
 		& label {
@@ -182,7 +195,7 @@ export const components = {
 			width: 100%;
 			height: 100%;
 			pointer-events: none;
-			border-bottom: 2px solid ${color.tertiary};
+			border-bottom: 2px solid ${color.s700};
 		}
 
 		& label::after {
@@ -193,36 +206,121 @@ export const components = {
 			left: 0;
 			bottom: -2px;
 			transition: all 0.3s ease;
-			border-bottom: 2px solid ${color.secondary};
+			border-bottom: 2px solid ${color.s500};
 			transform: translateX(-100%);
 		}
 		& label span {
 			position: absolute;
 			bottom: 5px;
-			${font.DCBold};
+			${font.RCBold};
 			color: ${color.header};
 			font-size: 18px;
 			transition: all 0.3s ease;
 		}
 	`,
+	labeledInput: css`
+		${font.RCBold};
+		font-size: 20px;
+		color: ${color.p500};
+		display: flex;
+		flex-direction: column;
+		margin: 10px 0;
+		& input {
+			font-size: 16px;
+			border-radius: 0;
+			${font.RCReg};
+			box-shadow: none;
+			background-color: ${color.t500};
+			border: none;
+			caret-color: ${color.p500};
+			caret-shape: block;
+			color: ${color.p500};
+			padding: 2px 6px;
+		}
+		& input:focus {
+			outline: none;
+		}
+		& textarea {
+			background-color: ${color.t500};
+			border: none;
+			font-size: 16px;
+			border-radius: 0;
+			box-shadow: none;
+			padding: 6px;
+			resize: vertical;
+		}
+		& textarea:focus {
+			outline: none;
+		}
+	`,
 	button: css`
-		padding: 2px 7px;
-		height: 36px;
+		padding: 2px 12px;
 		letter-spacing: 1px;
+		${font.RCBold};
+		height: 30px;
+		text-transform: uppercase;
+		font-size: 20px;
 		line-height: 30px;
-		${font.text};
-		background-color: ${color.BG2};
+		flex-shrink: 0;
+		background-color: ${color.b100};
 		${cursor.clickable};
-		border: 1px solid ${color.primary};
-		border-radius: ${length.radius};
+		border: 2px solid ${color.p500};
 		transition: background-color 0.1s;
-		font-size: 14px;
+		color: ${color.p500};
+		&:focus {
+			outline: none;
+		}
+		&:hover,
+		:active {
+			background-color: ${colorAdjust.darken(
+				color.b100,
+				0.1,
+			)};
+		}
+		&:disabled {
+			color: ${color.p500}90;
+			border-color: ${color.p500}90;
+			${cursor.notAllowed};
+		}
+		&:disabled:hover {
+			color: ${color.p500}90;
+			border-color: ${color.p500}90;
+			${cursor.notAllowed};
+			background-color: white;
+		}
+	`,
+	buttonInvert: css`
+		padding: 2px 12px;
+		letter-spacing: 1px;
+		${font.RCBold};
+		text-transform: uppercase;
+		height: 30px;
+		font-size: 20px;
+		line-height: 30px;
+		background-color: ${color.p500};
+		${cursor.clickable};
+		border: 2px solid ${color.b100};
+		transition: background-color 0.1s;
+		color: ${color.b100};
 		&:focus {
 			outline: none;
 		}
 		&:hover {
-			background-color: ${colorAdjust.darken(color.BG2, 0.1)};
+			background-color: ${colorAdjust.darken(
+				color.p500,
+				0.1,
+			)};
+		}
+		&:disabled {
+			color: ${color.p500}90;
+			border-color: ${color.p500}90;
+			${cursor.notAllowed};
+		}
+		&:disabled:hover {
+			color: ${color.p500}90;
+			border-color: ${color.p500}90;
+			${cursor.notAllowed};
+			background-color: white;
 		}
 	`,
 };
-

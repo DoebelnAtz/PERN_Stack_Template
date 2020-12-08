@@ -1,7 +1,8 @@
 import { RefObject, useContext, useEffect, useRef, useState } from 'react';
-import { makeRequest } from '../Api';
-import { WidthContext } from '../Context/WidthContext';
+import  api  from '../Api';
 import { useHistory } from 'react-router';
+import { isEqual } from 'lodash';
+import { useDeepCompareMemoize } from '../Utils';
 
 // custom hook for easy modal dismissal
 export const useDismiss = (
@@ -46,41 +47,22 @@ export const useMounted = () => {
 	return isMounted;
 };
 
-// A hook that keeps track of width used for mobile specific styles
-export const useWidth = () => {
-	const { state: width, update: setWidth } = useContext(WidthContext);
-	//const [width, setWidth] = useState(window.innerWidth);
-	const handleResize = (e: UIEvent) => {
-		let target = e.target as Window;
-		setWidth(target.innerWidth);
-	};
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	});
-	// return value for width and a boolean for convenient isMobile check
-	return [width <= 600, width];
-};
-
 export function useGet<F>(
 	url: string,
+	variables= {},
 	conditional = true,
 ) {
-	const [data, setData] = useState<F>();
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const resp = useRef<any>(null);
+	const [data, setData] = useState<F>();const resp = useRef<any>(null);
 	const history = useHistory();
 	const mounted = useMounted();
+	const propsVariablesMemoized = useDeepCompareMemoize(variables);
+
 	useEffect(() => {
 		async function request() {
 			try {
-				setIsLoading(true);
-				resp.current = await makeRequest(url, 'GET');
+				resp.current = await api.get(url, variables);
 				if (mounted.current) {
-					setData(resp.current.data);
+					setData(resp.current);
 				}
 			} catch (e) {
 				if (!e.response) {
@@ -91,11 +73,10 @@ export function useGet<F>(
 				}
 			} finally {
 				if (mounted.current) {
-					setIsLoading(false);
 				}
 			}
 		}
 		if (conditional && mounted.current) request();
-	}, [url, conditional]);
-	return [data, setData, isLoading] as const;
+	}, [url, conditional, propsVariablesMemoized]);
+	return [data, setData] as const;
 }

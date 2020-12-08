@@ -1,84 +1,50 @@
 import axios from 'axios';
 
 import config from '../Config'
-import {getLocal, setLocal} from "../Utils";
+import { getLocal, objectToQueryString } from '../Utils';
 
-export const makeRequest = async (url: string, method: any, data: any = {}) => {
-	let resp;
 
-	try {
-		resp = await axios({
-			url: `${config.url}/api${url}`,
-			method: method,
-			data: data,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization:
-					'Bearer ' +
-					(localStorage.getItem('user')
-						? getLocal('user').token
-						: ''),
-				'x-refresh-token': localStorage.getItem('user')
-					? getLocal('user').refreshToken
-					: '',
-			},
-		});
-	} catch (e) {
-		console.log(e);
-		if (!e.response) {
-			//window.location.replace('/505');
-		} else if (e.response.status === 401) {
-			try {
-				let refreshAttempt = await axios({
-					url: `${config.url}/api/auth/refresh_token`,
-					method: method,
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization:
-							'Bearer ' +
-							(localStorage.getItem('user')
-								? getLocal('user').token
-								: ''),
-						'x-refresh-token': localStorage.getItem('user')
-							? getLocal('user').refreshToken
-							: '',
-					},
-				});
-				if (refreshAttempt.data) {
-					setLocal('user', refreshAttempt.data);
-				}
-				try {
-					resp = await axios({
-						url: `${config.url}/api${url}`,
-						method: method,
-						data: data,
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization:
-								'Bearer ' +
-								(localStorage.getItem('user')
-									? getLocal('user').token
-									: ''),
-							'x-refresh-token': localStorage.getItem('user')
-								? getLocal('user').refreshToken
-								: '',
-						},
-					});
-				} catch (e) {
-					if (e.response.status === 401) {
-						window.location.replace('/');
-					}
-					localStorage.clear();
-				}
-			} catch (e) {
-				if (e.response.status === 401) {
-					window.location.replace('/');
-				}
-				localStorage.clear();
-			}
-		} else {
-			throw e;
-		}
-	}
-	return resp;
+const defaults = {
+  headers: () => ({
+    'Content-Type': 'application/json',
+    Authorization: getLocal('token') ? `Bearer ${getLocal('token')}` : undefined,
+  }),
+  error: {
+    code: 'INTERNAL_ERROR',
+    message: 'Something went wrong. Please check your internet connection.',
+    status: 503,
+    data: {},
+  },
+};
+
+const makeRequest = async (method: any, url: string, data: any = {}) => new Promise((resolve, reject) => {
+    axios({
+      url: `${config.url}/api${url}`,
+      method,
+      headers: defaults.headers(),
+      params: method === 'get' ? data : undefined,
+      data: method !== 'get' ? data : undefined,
+      paramsSerializer: objectToQueryString,
+    }).then(
+      response => {
+        resolve(response.data);
+      },
+      error => {
+        if (error.response) {
+                    reject(defaults.error);
+
+        } else {
+          reject(defaults.error);
+        }
+      },
+    );
+});
+
+export default {
+// @ts-ignore
+  get: (...args: any ) => makeRequest('get', ...args),
+  post: (...args: [any]) => makeRequest('post', ...args),
+  put: (...args: [any]) => makeRequest('put', ...args),
+  patch: (...args: [any]) => makeRequest('patch', ...args),
+  delete: (...args: [any]) => makeRequest('delete', ...args),
 };

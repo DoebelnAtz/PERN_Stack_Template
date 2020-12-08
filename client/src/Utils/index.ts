@@ -1,3 +1,7 @@
+import queryString from 'query-string';
+import { useRef } from 'react';
+import { isEqual } from 'lodash';
+
 export const capitalizeFirst = (string: string) => {
 	if (string) return string[0].toUpperCase() + string.slice(1);
 };
@@ -17,6 +21,31 @@ export const getLocal = (item: string) => {
 export const setLocal = (name: string, jsonItem: { items: any }) => {
 	localStorage.setItem(name, JSON.stringify(jsonItem));
 };
+
+
+
+export const useDeepCompareMemoize = (value: any) => {
+  const valueRef = useRef();
+
+  if (!isEqual(value, valueRef.current)) {
+    valueRef.current = value;
+  }
+  return valueRef.current;
+};
+
+
+export const queryStringToObject = (str: string, options = {}) =>
+  queryString.parse(str, {
+    arrayFormat: 'bracket',
+    ...options,
+  });
+
+export const objectToQueryString = (obj: any, options = {}) =>
+  queryString.stringify(obj, {
+    arrayFormat: 'bracket',
+    ...options,
+  });
+
 
 export const getLocalTimeFormat = (date: string) => {
 	let res = new Date(date);
